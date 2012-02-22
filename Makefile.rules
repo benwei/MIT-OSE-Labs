@@ -1,0 +1,8 @@
+
+mk-clean:
+	@for i in $(projects) ; do \
+	if [ -d "$$i" -a -f "$$i/Makefile" ]; then \
+		echo "cleaning [$$i]" ; \
+		make clean -C "$$i" ; \
+	fi \
+	done
