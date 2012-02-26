@@ -1,6 +1,7 @@
-(10,000 practices made an domain expert)
+(practice 10,000 hours made an domain expert)
 
 # L1: OS/overview
+- shellop: some shell samples
 - ush: foo shell in sleep 2 seconds
 - ucat: dump file or read data from stdin
 - pipe1: one way communication samples
