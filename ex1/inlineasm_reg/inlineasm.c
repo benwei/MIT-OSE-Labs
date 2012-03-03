@@ -11,12 +11,13 @@ int swap(int a, int b) {
         printf("before a=%d, b=%d\n", a, b);
 
         __asm__ __volatile__(
-        "movl %1, %%eax;"
-        "movl %0, %%ebx;"
-        "movl %%eax, %0;"
-        "movl %%ebx, %1"
+        "movl %1, %%eax\t\n"
+        "movl %0, %%ebx\t\n"
+        "movl %%eax, %0\t\n"
+        "movl %%ebx, %1\t\n"
         :"=r" (a),"=r"(b) /* output */
-        :"r" (a),"r"(b)
+	/* change 'r' to '0'/'1' for cygwin build testing */
+        :"0" (a),"1"(b)
         :"%eax", "%ebx"
         ); /* input */
 
