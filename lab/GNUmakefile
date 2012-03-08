@@ -157,6 +157,9 @@ print-gdbport:
 print-qemugdb:
 	@echo $(QEMUGDB)
 
+run:
+	make -C .. run
+
 # For deleting the build
 clean:
 	rm -rf $(OBJDIR) .gdbinit jos.in

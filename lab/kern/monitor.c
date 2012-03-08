@@ -76,6 +76,8 @@ int
 mon_backtrace(int argc, char **argv, struct Trapframe *tf)
 {
 	// Your code here.
+	unsigned int eip = read_eip();	
+	cprintf("eip=%x\n", eip);
 	return 0;
 }
 
