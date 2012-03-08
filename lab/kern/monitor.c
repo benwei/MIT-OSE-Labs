@@ -21,8 +21,12 @@ struct Command {
 	int (*func)(int argc, char** argv, struct Trapframe* tf);
 };
 
+static int
+mon_octal(int argc, char **argv, struct Trapframe *tf);
+
 static struct Command commands[] = {
 	{ "help", "Display this list of commands", mon_help },
+	{ "octal", "Display octal", mon_octal},
 	{ "kerninfo", "Display information about the kernel", mon_kerninfo },
 };
 #define NCOMMANDS (sizeof(commands)/sizeof(commands[0]))
@@ -30,6 +34,18 @@ static struct Command commands[] = {
 unsigned read_eip();
 
 /***** Implementations of basic kernel monitor commands *****/
+int
+mon_octal(int argc, char **argv, struct Trapframe *tf)
+{
+	int i;
+	if (argc < 2) {
+		cprintf("syntax: octal <Decimal>\n");
+		return 0;
+	}
+	unsigned int num = strtol(argv[1], NULL, 10);
+	cprintf("octal(%u)=%o(o)\n", num, num);
+	return 0;
+}
 
 int
 mon_help(int argc, char **argv, struct Trapframe *tf)
