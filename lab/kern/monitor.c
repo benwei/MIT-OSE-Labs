@@ -66,18 +66,41 @@ mon_kerninfo(int argc, char **argv, struct Trapframe *tf)
 	cprintf("  entry  %08x (virt)  %08x (phys)\n", entry, entry - KERNBASE);
 	cprintf("  etext  %08x (virt)  %08x (phys)\n", etext, etext - KERNBASE);
 	cprintf("  edata  %08x (virt)  %08x (phys)\n", edata, edata - KERNBASE);
-	cprintf("  end    %08x (virt)  %08x (phys)\n", end, end - KERNBASE);
+	cprintf("  end	%08x (virt)  %08x (phys)\n", end, end - KERNBASE);
 	cprintf("Kernel executable memory footprint: %dKB\n",
 		(end-entry+1023)/1024);
 	return 0;
 }
 
+extern unsigned int bootstacktop;
+typedef unsigned int uint;
+static int
+dump_stack(uint *p)
+{
+	uint i = 2;
+	for (; i < 7; i++) {
+		cprintf(" %08x", *(p+i)); 
+	}
+	return 0;
+}
 int
 mon_backtrace(int argc, char **argv, struct Trapframe *tf)
 {
-	// Your code here.
-	unsigned int eip = read_eip();	
-	cprintf("eip=%x\n", eip);
+	uint j = 0;
+	uint eip = read_eip();	
+	uint ebp = read_ebp();	
+	uint *p = (uint *)ebp;
+	
+	cprintf("\nebp=%08x  eip=%08x args", ebp, eip);
+	dump_stack(p);
+	for(j = 0; j < 15; j++) {
+		ebp = *p;
+		if (ebp == 0) break;
+		cprintf("\nebp=%08x  eip=%08x args", ebp, *(p+1));
+		dump_stack(p);
+		p = (uint *)ebp;
+	}
+	cprintf("\n");
 	return 0;
 }
 
