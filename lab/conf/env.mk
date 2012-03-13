@@ -14,10 +14,16 @@ V = @
 #
 # GCCPREFIX=''
 # build on cygwin with following
-CROSS_COMPILE=/usr/local/cross/bin/i586-elf-
-GCCPREFIX=$(CROSS_COMPILE)
-
+KERNEL_NAME=$(shell uname -s)
+ifeq ($(KERNEL_NAME),Linux)
 # If the makefile cannot find your QEMU binary, uncomment the
 # following line and set it to the full path to QEMU.
 #
 # QEMU=
+QEMU=/usr/local/qemuose/bin/qemu
+else
+CROSS_COMPILE=/usr/local/cross/bin/i586-elf-
+endif
+
+GCCPREFIX=$(CROSS_COMPILE)
+
