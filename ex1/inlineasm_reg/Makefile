@@ -2,10 +2,16 @@ SYSINFO:=$(shell uname -s)
 CYGWIN:=$(findstring CYGWIN,$(SYSINFO))
 
 target = inlineasm
-CFLAGS = --save-temps
+CFLAGS = -O0 --save-temps
 
 ifeq ($(CYGWIN),)
-CFLAGS += -fasm-blocks
+
+ifeq ($(SYSINFO),Linux)
+
+else # not Linux
+CFLAGS += #-fasm-blocks
+endif # Linux
+
 endif
 all: $(target) run
 
