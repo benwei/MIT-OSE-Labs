@@ -24,7 +24,11 @@ struct Command {
 static int
 mon_octal(int argc, char **argv, struct Trapframe *tf);
 
+int
+mon_backtrace(int argc, char **argv, struct Trapframe *tf);
+
 static struct Command commands[] = {
+	{ "backtrace", "Display callbacks", mon_backtrace},
 	{ "help", "Display this list of commands", mon_help },
 	{ "octal", "Display octal", mon_octal},
 	{ "kerninfo", "Display information about the kernel", mon_kerninfo },

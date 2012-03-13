@@ -179,8 +179,11 @@ debuginfo_eip(uintptr_t addr, struct Eipdebuginfo *info)
 	//	Look at the STABS documentation and <inc/stab.h> to find
 	//	which one.
 	// Your code here.
-	cprintf("\n%s: %08x", info->eip_fn_name, info->eip_fn_addr);
-
+	if (info->eip_file && *info->eip_file != '<') {
+	cprintf("\n\t%s: %08x (%s:%d)", info->eip_fn_name, info->eip_fn_addr, info->eip_file, info->eip_line);
+	} else {
+	cprintf("\n\t%s: %08x (+%d)", info->eip_fn_name, info->eip_fn_addr, addr);
+	}
 	
 	// Search backwards from the line number for the relevant filename
 	// stab.
