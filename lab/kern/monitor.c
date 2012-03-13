@@ -90,17 +90,22 @@ mon_backtrace(int argc, char **argv, struct Trapframe *tf)
 	uint eip = read_eip();	
 	uint ebp = read_ebp();	
 	uint *p = (uint *)ebp;
-	
+	struct Eipdebuginfo info = {0};
 	cprintf("\nebp=%08x  eip=%08x args", ebp, eip);
 	dump_stack(p);
+	debuginfo_eip((uintptr_t)eip, &info);
 	for(j = 0; j < 15; j++) {
 		ebp = *p;
 		if (ebp == 0) break;
 		cprintf("\nebp=%08x  eip=%08x args", ebp, *(p+1));
 		dump_stack(p);
+		memset(&info, 0, sizeof(info));
+		debuginfo_eip((uintptr_t)*(p+1), &info);
 		p = (uint *)ebp;
+
 	}
 	cprintf("\n");
+
 	return 0;
 }
 
