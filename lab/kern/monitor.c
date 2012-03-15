@@ -76,39 +76,35 @@ mon_kerninfo(int argc, char **argv, struct Trapframe *tf)
 	return 0;
 }
 
+#define J_NEXT_EBP(ebp) (*(uint *)ebp)
+#define J_ARG_N(ebp, n) (*(uint *)(ebp + n))
+
 extern unsigned int bootstacktop;
 typedef unsigned int uint;
-static int
+static struct Eipdebuginfo info = {0};
+static inline uint*
 dump_stack(uint *p)
 {
-	uint i = 2;
-	for (; i < 7; i++) {
-		cprintf(" %08x", *(p+i)); 
+	uint i;
+	cprintf("ebp=%08x  eip=%08x args", p, J_ARG_N(p, 1));
+	for (i=2; i < 7; i++) {
+		cprintf(" %08x",J_ARG_N(p,i)); 
 	}
-	return 0;
+
+	memset(&info, 0, sizeof(info));
+	debuginfo_eip((uintptr_t)*(p+1), &info);
+	cprintf("\n");
+	return (uint *)J_NEXT_EBP(p);
 }
 int
 mon_backtrace(int argc, char **argv, struct Trapframe *tf)
 {
-	uint j = 0;
+	uint *p = (uint *) read_ebp();
 	uint eip = read_eip();	
-	uint ebp = read_ebp();	
-	uint *p = (uint *)ebp;
-	struct Eipdebuginfo info = {0};
-	cprintf("\nebp=%08x  eip=%08x args", ebp, eip);
-	dump_stack(p);
-	debuginfo_eip((uintptr_t)eip, &info);
-	for(j = 0; j < 15; j++) {
-		ebp = *p;
-		if (ebp == 0) break;
-		cprintf("\nebp=%08x  eip=%08x args", ebp, *(p+1));
-		dump_stack(p);
-		memset(&info, 0, sizeof(info));
-		debuginfo_eip((uintptr_t)*(p+1), &info);
-		p = (uint *)ebp;
-
-	}
-	cprintf("\n");
+	cprintf("current eip=%08x\n", eip);
+	do {
+		p = dump_stack(p);
+	} while(p); // && *p != 0);
 
 	return 0;
 }
