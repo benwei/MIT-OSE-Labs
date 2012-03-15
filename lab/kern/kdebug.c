@@ -143,6 +143,10 @@ debuginfo_eip(uintptr_t addr, struct Eipdebuginfo *info)
 	if (lfile == 0)
 		return -1;
 
+	info->eip_file = stabstr + stabs[lfile].n_strx;
+	if (info->eip_file[0] == '{') 
+		info->eip_file = stabstr + stabs[lfile+1].n_strx;
+
 	// Search within that file's stabs for the function definition
 	// (N_FUN).
 	lfun = lfile;
@@ -178,9 +182,14 @@ debuginfo_eip(uintptr_t addr, struct Eipdebuginfo *info)
 	//	There's a particular stabs type used for line numbers.
 	//	Look at the STABS documentation and <inc/stab.h> to find
 	//	which one.
+	
+	stab_binsearch(stabs, &lline, &rline, N_SLINE, addr);
+	if (rline >= lline)
+		info->eip_line = stabs[lline].n_desc;
 
-	cprintf("\n\t(%s:%d): %s(%08x)+%d", info->eip_file, info->eip_line,
-	     info->eip_fn_name, info->eip_fn_addr, addr == info->eip_fn_addr ? 0:addr);
+	cprintf("\n\t(%s:%d): %.*s+%d", info->eip_file, info->eip_line,
+	     info->eip_fn_namelen, info->eip_fn_name,
+	     addr == info->eip_fn_addr ? 0:addr);
 	
 	// Search backwards from the line number for the relevant filename
 	// stab.

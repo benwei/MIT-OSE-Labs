@@ -101,7 +101,9 @@ mon_backtrace(int argc, char **argv, struct Trapframe *tf)
 {
 	uint *p = (uint *) read_ebp();
 	uint eip = read_eip();	
-	cprintf("current eip=%08x\n", eip);
+	cprintf("current eip=%08x", eip);
+	debuginfo_eip((uintptr_t) eip, &info);
+	cprintf("\n");
 	do {
 		p = dump_stack(p);
 	} while(p); // && *p != 0);
