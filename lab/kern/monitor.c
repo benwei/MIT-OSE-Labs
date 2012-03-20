@@ -86,7 +86,7 @@ static inline uint*
 dump_stack(uint *p)
 {
 	uint i;
-	cprintf("ebp=%08x  eip=%08x args", p, J_ARG_N(p, 1));
+	cprintf("ebp %08x  eip %08x args", p, J_ARG_N(p, 1));
 	for (i=2; i < 7; i++) {
 		cprintf(" %08x",J_ARG_N(p,i)); 
 	}
