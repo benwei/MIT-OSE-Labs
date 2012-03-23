@@ -7,3 +7,6 @@
 [submodule "labs"]
 	path = labs
 	url = git@github.com:benwei/MIT-JOS.git
+[submodule "others/HawxChen"]
+	path = others/HawxChen
+	url = https://github.com/HawxChen/MIT-6.828-Adventure.git
