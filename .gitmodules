@@ -4,3 +4,6 @@
 [submodule "others/l2y3n2"]
 	path = others/l2y3n2
 	url = https://github.com/l2y3n2/my-jos.git
+[submodule "labs"]
+	path = labs
+	url = git@github.com:benwei/MIT-JOS.git
