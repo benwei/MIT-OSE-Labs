@@ -187,7 +187,7 @@ debuginfo_eip(uintptr_t addr, struct Eipdebuginfo *info)
 	if (rline >= lline)
 		info->eip_line = stabs[lline].n_desc;
 
-	cprintf("\n\t(%s:%d): %.*s+%d", info->eip_file, info->eip_line,
+	cprintf("\n\t%s:%d: %.*s+%d", info->eip_file, info->eip_line,
 	     info->eip_fn_namelen, info->eip_fn_name,
 	     addr == info->eip_fn_addr ? 0:addr);
 	
