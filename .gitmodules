@@ -1,6 +1,6 @@
 [submodule "others/davyzhu"]
 	path = others/davyzhu
-	url = https://github.com/davyzhu/joslab
+	url = https://github.com/davyzhu/joslab.git
 [submodule "others/l2y3n2"]
 	path = others/l2y3n2
 	url = https://github.com/l2y3n2/my-jos.git
